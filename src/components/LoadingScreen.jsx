@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 import '../styles/LoadingScreen.css';
-import logoImage from '../assets/LoadPage/logo.png';
+import logoImage from '../assets/LoadPage/logo.svg';
 
-import l1 from '../assets/LoadPage/1.png';
-import l2 from '../assets/LoadPage/2.png';
-import l3 from '../assets/LoadPage/3.png';
-import l4 from '../assets/LoadPage/4.png';
-import l5 from '../assets/LoadPage/5.png';
-import l6 from '../assets/LoadPage/6.png';
+import l1 from '../assets/LoadPage/1.svg';
+import l2 from '../assets/LoadPage/2.svg';
+import l3 from '../assets/LoadPage/3.svg';
+import l4 from '../assets/LoadPage/4.svg';
+import l5 from '../assets/LoadPage/5.svg';
+import l6 from '../assets/LoadPage/6.svg';
 
-import l1a from '../assets/LoadPage/1a.png';
-import l2a from '../assets/LoadPage/2a.png';
-import l3a from '../assets/LoadPage/3a.png';
-import l4a from '../assets/LoadPage/4a.png';
-import l5a from '../assets/LoadPage/5a.png';
-import l6a from '../assets/LoadPage/6a.png';
+import l1a from '../assets/LoadPage/1a.svg';
+import l2a from '../assets/LoadPage/2a.svg';
+import l3a from '../assets/LoadPage/3a.svg';
+import l4a from '../assets/LoadPage/4a.svg';
+import l5a from '../assets/LoadPage/5a.svg';
+import l6a from '../assets/LoadPage/6a.svg';
 
 const inactiveLetters = [l1, l2, l3, l4, l5, l6];
 const activeLetters = [l1a, l2a, l3a, l4a, l5a, l6a];
