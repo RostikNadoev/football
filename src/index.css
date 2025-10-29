@@ -25,3 +25,10 @@ body {
 
   overflow-x: hidden;
 }
+
+@font-face {
+  font-family: 'KZ Supercell-Magic';
+  src: url('./assets/fonts/KZ Supercell-Magic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
