@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
 import LoadingScreen from './components/LoadingScreen';
 import MainScreen from './components/MainScreen';
+import PvpScreen from './components/PvpScreen';
+import TasksScreen from './components/TasksScreen';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState('main');
 
   useEffect(() => {
-    // Инициализация Telegram WebApp для полного экрана
     if (window.Telegram?.WebApp) {
       const webApp = window.Telegram.WebApp;
-      
-      // 🔔 Сообщаем Telegram что приложение готово
       webApp.ready();
-      // ⚡ ВКЛЮЧАЕМ ПОЛНЫЙ ЭКРАН
       webApp.expand();
       
       console.log('✅ Telegram WebApp запущен в полноэкранном режиме');
@@ -28,6 +27,22 @@ export default function App() {
     setIsLoading(false);
   };
 
+  const navigateTo = (screen) => {
+    setCurrentScreen(screen);
+  };
+
+  const renderScreen = () => {
+    switch (currentScreen) {
+      case 'pvp':
+        return <PvpScreen onNavigate={navigateTo} />;
+      case 'tasks':
+        return <TasksScreen onNavigate={navigateTo} />;
+      case 'main':
+      default:
+        return <MainScreen onNavigate={navigateTo} />;
+    }
+  };
+
   return (
     <div>
       {isLoading ? (
@@ -37,7 +52,7 @@ export default function App() {
           assetsLoaded={assetsLoaded}
         />
       ) : (
-        <MainScreen />
+        renderScreen()
       )}
     </div>
   );

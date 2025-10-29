@@ -1,28 +1,24 @@
-import { useState, useEffect, useRef } from 'react';
-import '../styles/MainScreen.css';
-
-import ava from '../assets/MainPage/ava.jpg';
-import ton from '../assets/MainPage/ton.svg';
-import add_balance from '../assets/MainPage/add_balance.svg';
+import MainLayout from './MainLayout';
 import banner from '../assets/MainPage/banner.png';
+import middle from '../assets/MainPage/middle.png';
 import cardBack1 from '../assets/MainPage/chest1/back.png';
 import cardBack2 from '../assets/MainPage/chest1/back2.png';
 import cardBack3 from '../assets/MainPage/chest1/back3.png';
 import cardMain1 from '../assets/MainPage/chest1/main.png';
 import cardMain2 from '../assets/MainPage/chest2/main.png'; 
 import cardMain3 from '../assets/MainPage/chest3/main.png';
-import foot from '../assets/MainPage/foot.png';
-import footover from '../assets/MainPage/foot-on.svg';
-import pvpicon from '../assets/MainPage/pvp-icon.svg';
-import homeicon from '../assets/MainPage/home-icon.svg';
-import tasksicon from '../assets/MainPage/tasks-icon.svg';
+import cardton1 from '../assets/MainPage/chest1/ton.png';
+import cardton2 from '../assets/MainPage/chest2/ton.png';
+import cardton3 from '../assets/MainPage/chest3/ton.png';
+import { useState, useEffect, useRef } from 'react';
 
 const TOTAL = 3;
 
 const cardImages = [cardBack1, cardBack2, cardBack3];
 const cardMainImages = [cardMain1, cardMain2, cardMain3];
+const cardTonImages = [cardton1, cardton2, cardton3];
 
-export default function MainScreen() {
+export default function MainScreen({ onNavigate }) {
   const [currentIndex, setCurrentIndex] = useState(2);
   const [offset, setOffset] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -124,101 +120,84 @@ export default function MainScreen() {
     }
   };
 
+  const getButtonText = (id) => {
+    switch(id) {
+      case 0: return '1 TON';
+      case 1: return '2 TON';
+      case 2: return '5 TON';
+      default: return '';
+    }
+  };
+
   return (
-    <div className="main-screen">
-      <header className="header-outer">
-        <div className="header-inner">
-          <div className="user-info">
-            <img src={ava} alt="User" className="user-avatar" loading="lazy" />
-            <span className="user-username">Username</span>
+    <MainLayout onNavigate={onNavigate} currentScreen="main">
+      <div className="banner-section">
+        <img src={banner} alt="banner" className="banner-png" loading="lazy" />
+      </div>
 
-            <div className="balance-container">
-              <img src={ton} alt="TON" className="balance-icon" />
-              <span className="balance-amount">1337</span>
-            </div>
-
-            <div className="add_balance-button">
-              <img src={add_balance} alt="add" className="add_balance-icon" />
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="main-content">
-        <div className="banner-section">
-          <img src={banner} alt="banner" className="banner-png" loading="lazy" />
-        </div>
-
+      <div
+        className="cards-slider"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+      >
         <div
-          className="cards-slider"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
+          className="cards-slider-inner"
+          style={{
+            transform: `translateX(${offset}px)`,
+            transition: isAnimating ? 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)' : 'none',
+          }}
+          onTransitionEnd={handleAnimationEnd}
         >
-          <div
-            className="cards-slider-inner"
-            style={{
-              transform: `translateX(${offset}px)`,
-              transition: isAnimating ? 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)' : 'none',
-            }}
-            onTransitionEnd={handleAnimationEnd}
-          >
-            {cards.map((id, index) => (
-              <div 
-                key={index}
-                className={`card ${index === activeCardIndex ? 'card--active' : ''}`}
-              >
+          {cards.map((id, index) => (
+            <div 
+              key={index}
+              className={`card card-${id} ${index === activeCardIndex ? 'card--active' : ''}`}
+            >
+              <img 
+                src={cardImages[id]}
+                alt={`Card ${id + 1}`} 
+                className="card-image"
+                loading="lazy"
+              />
+              {cardMainImages[id] && (
                 <img 
-                  src={cardImages[id]}
-                  alt={`Card ${id + 1}`} 
-                  className="card-image"
+                  src={cardMainImages[id]}
+                  alt="Main" 
+                  className={getMainImageClass(id)}
                   loading="lazy"
                 />
-                {cardMainImages[id] && (
-                  <img 
-                    src={cardMainImages[id]}
-                    alt="Main" 
-                    className={getMainImageClass(id)}
-                    loading="lazy"
-                  />
-                )}
+              )}
+              {cardTonImages[id] && (
+                <img 
+                  src={cardTonImages[id]}
+                  alt="TON" 
+                  className="card-ton-image"
+                  loading="lazy"
+                />
+              )}
+              <div className="card-button">
+                <span className="card-button-text">
+                  <span className="card-button-number">
+                    {getButtonText(id).split(' ')[0]}
+                  </span>
+                  <span className="card-button-ton">
+                    {' '}TON
+                  </span>
+                </span>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </main>
-
-      <footer className="main-footer">
-        <div className="footer-blocks-container">
-          <div className="footer-block-item">
-            <div className="footer-block-wrapper">
-              <img src={foot} alt="block" className="footer-block"/>
-              <img src={pvpicon} alt="PVP" className="footer-block-icon"/>
-              <img src={footover} alt="decoration" className="footer-block-overlay"/>
-            </div>
-            <span className="footer-label">PVP</span>
-          </div>
-          
-          <div className="footer-block-item">
-            <div className="footer-block-wrapper">
-              <img src={foot} alt="block" className="footer-block"/>
-              <img src={homeicon} alt="HOME" className="footer-block-icon"/>
-              <img src={footover} alt="decoration" className="footer-block-overlay"/>
-            </div>
-            <span className="footer-label">MAIN</span>
-          </div>
-          
-          <div className="footer-block-item">
-            <div className="footer-block-wrapper">
-              <img src={foot} alt="block" className="footer-block"/>
-              <img src={tasksicon} alt="TASKS" className="footer-block-icon"/>
-              <img src={footover} alt="decoration" className="footer-block-overlay"/>
-            </div>
-            <span className="footer-label">TASKS</span>
-          </div>
-        </div>
-      </footer>
-    </div>
+        
+        <img 
+          src={middle} 
+          alt="decoration" 
+          className="middle-decoration"
+          loading="lazy"
+        />
+      </div>
+    </MainLayout>
   );
 }
