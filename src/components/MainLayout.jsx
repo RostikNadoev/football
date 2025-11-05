@@ -15,7 +15,7 @@ export default function MainLayout({ children, onNavigate, currentScreen = 'main
       {/* Header */}
       <header className="header-outer">
         <div className="header-inner">
-          <div className="user-info">
+          <div className="user-info" onClick={() => onNavigate('profile')}>
             <img src={ava} alt="User" className="user-avatar" loading="lazy" />
             <span className="user-username">Username</span>
 

@@ -1,3 +1,4 @@
+// components/MainScreen.jsx - обновленная версия
 import MainLayout from './MainLayout';
 import banner from '../assets/MainPage/banner.png';
 import middle from '../assets/MainPage/middle.png';
@@ -18,14 +19,21 @@ const cardImages = [cardBack1, cardBack2, cardBack3];
 const cardMainImages = [cardMain1, cardMain2, cardMain3];
 const cardTonImages = [cardton1, cardton2, cardton3];
 
-export default function MainScreen({ onNavigate }) {
-  const [currentIndex, setCurrentIndex] = useState(2);
+export default function MainScreen({ onNavigate, initialCardIndex = 2 }) { // Добавляем пропс initialCardIndex
+  const [currentIndex, setCurrentIndex] = useState(initialCardIndex); // Используем initialCardIndex
   const [offset, setOffset] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [activeCardIndex, setActiveCardIndex] = useState(2);
   const cardWidthRef = useRef(240);
   const touchStartX = useRef(0);
   const cooldownRef = useRef(false);
+
+  // Добавляем эффект для обновления состояния при изменении initialCardIndex
+  useEffect(() => {
+    setCurrentIndex(initialCardIndex);
+    setActiveCardIndex(2); // Сбрасываем активную карточку в центр
+    setOffset(0); // Сбрасываем смещение
+  }, [initialCardIndex]);
 
   useEffect(() => {
     const updateCardWidth = () => {
@@ -100,6 +108,26 @@ export default function MainScreen({ onNavigate }) {
     }
   };
 
+  // Добавляем обработчик клика по карточке
+  const handleCardClick = (cardId) => {
+    if (cooldownRef.current) return;
+    
+    // Переходим на соответствующую страницу карточки, передавая текущий индекс
+    switch(cardId) {
+      case 0:
+        onNavigate('card1', currentIndex);
+        break;
+      case 1:
+        onNavigate('card2', currentIndex);
+        break;
+      case 2:
+        onNavigate('card3', currentIndex);
+        break;
+      default:
+        break;
+    }
+  };
+
   const getCards = () => {
     const cards = [];
     for (let i = -1; i <= 3; i++) {
@@ -154,6 +182,7 @@ export default function MainScreen({ onNavigate }) {
             <div 
               key={index}
               className={`card card-${id} ${index === activeCardIndex ? 'card--active' : ''}`}
+              onClick={() => handleCardClick(id)}
             >
               <img 
                 src={cardImages[id]}
@@ -177,7 +206,13 @@ export default function MainScreen({ onNavigate }) {
                   loading="lazy"
                 />
               )}
-              <div className="card-button">
+              <div 
+                className="card-button" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCardClick(id);
+                }}
+              >
                 <span className="card-button-text">
                   <span className="card-button-number">
                     {getButtonText(id).split(' ')[0]}
